@@ -1,0 +1,97 @@
+.sidebar_pc {
+    width: 300px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: lightblue;
+    &_profile {
+        &_img {
+            width: 50px;
+            height: 50px;
+            // align-items: center;
+            border-radius: 20px;
+            margin: 20px auto;
+        }
+    }
+}
+
+.sidebar_overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: none;
+    animation: fadeIn linear 0.2s;
+}
+.nav_input{
+    display: none;
+}
+.nav_input:checked ~ .sidebar_overlay{
+    display: block;
+}
+
+.nav_input:checked ~ .sidebar_mobile{
+    transform: translateX(0);
+    opacity: 1;
+}
+.sidebar_mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 100%;
+    background-color: #fff;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: all linear 0.2s;
+}
+.Navbar {
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+/*---mobile */
+.Navbar_btn {
+    width: 28px;
+    height: 50px;
+    color: red;
+    display: none;
+    margin: 0 20px;
+}
+.Navbar_btnTime {
+    width: 28px;
+    height: 50px;
+    color: red;
+    // display: none;
+    margin: 0 20px;
+}
+
+// @media only screen and (max-width: 1600px) {
+//     .sidebar_pc {
+//         width: 80px;
+//     }
+// }
+
+@media only screen and (max-width: 1023px) {
+    .Navbar_btn {
+        display: block;
+    }
+    .sidebar_pc {
+        display: none;
+    }
+}
+
+@keyframes fadeIn{
+    from {
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}

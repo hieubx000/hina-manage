@@ -3,27 +3,31 @@ import { Button, Checkbox, Form, Input } from "antd";
 import { auth, google } from "../../config/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
 import styles from "./SignIn.module.scss";
+import { localStorageConstant } from "../../constant/localStorage";
+import { useNavigate } from "react-router-dom";
+import { rootPath } from "../../helpers/buildUrl";
 
 export default function SignIn() {
   const [isLogin, setIsLogin] = useState(false);
-
+  let navigate = useNavigate();
   const onFinish = (values) => {
     console.log("Success:", values);
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
   const login = async (provider) => {
     const result = await signInWithPopup(auth, provider);
-    console.log(result);
-
+    const userCurrent = {
+      displayName: result.user.displayName,
+      photoURL: result.user.photoURL,
+      email: result.user.email,
+    };
+    localStorage.setItem(
+      localStorageConstant.userCurrent,
+      JSON.stringify(userCurrent)
+    );
+    localStorage.setItem(localStorageConstant.token, result.user.accessToken);
+    navigate(rootPath.home);
     setIsLogin(true);
-  };
-  const logout = async () => {
-    const res = await signOut(auth);
-    setIsLogin(false);
   };
 
   return (
@@ -113,7 +117,6 @@ export default function SignIn() {
               Submit
             </button>
           </Form.Item>
-          <h1>{isLogin ? "true" : "false"}</h1>
           <img
             onClick={() => login(google)}
             src="/assets/icons/auth/google.svg"
@@ -138,9 +141,6 @@ export default function SignIn() {
             alt=""
           />
         </Form>
-        <Button type="primary" htmlType="submit" onClick={logout}>
-          Logout
-        </Button>
       </div>
     </div>
   );
