@@ -1,4 +1,5 @@
 export const rootPath = {
     home: '/',
-    signin: '/signin'
+    signin: '/signin',
+    signup: '/signup'
 }

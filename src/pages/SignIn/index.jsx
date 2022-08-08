@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Button, Checkbox, Form, Input } from "antd";
+import { Link } from "react-router-dom";
 import { auth, google } from "../../config/firebase";
 import { signInWithPopup, signOut } from "firebase/auth";
 import styles from "./SignIn.module.scss";
 import { localStorageConstant } from "../../constant/localStorage";
 import { useNavigate } from "react-router-dom";
 import { rootPath } from "../../helpers/buildUrl";
+import FormInput from "../../components/elements/FormInput";
 
 export default function SignIn() {
   const [isLogin, setIsLogin] = useState(false);
@@ -30,118 +32,83 @@ export default function SignIn() {
     setIsLogin(true);
   };
 
+  const inputs = [
+    {
+      id: 2,
+      name: "email",
+      type: "email",
+      htmlTag: "input",
+      placeholder: "Email",
+      errorMessage: "It should be a valid email address!",
+      label: "Email",
+      required: true,
+    },
+    {
+      id: 4,
+      name: "password",
+      type: "password",
+      htmlTag: "input",
+      placeholder: "Password",
+      errorMessage:
+        "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+      label: "Password",
+      pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+      required: true,
+    },
+  ];
+
   return (
-    <div className={styles.container}>
-      <div>
+    <div className={styles.app}>
+      <Form
+        className={styles.boxForm}
+        name="basic"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+        // onFinishFailed={onFinishFailed}
+        autoComplete="off"
+      >
         <img
-          style={{ width: "60vw", height: "100vh" }}
+          className={styles.boxForm_img}
+          // style={{ width: "50vw", height: "80vh" }}
           src="/assets/images/auth/img_login.jpg"
           alt=""
         />
-      </div>
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "100%",
-          width: "100%",
-          justifyContent: "center",
-        }}
-      >
-        <img
-          style={{ width: "200px", height: "200px" }}
-          src="/assets/icons/logo.svg"
-          alt=""
-        />
-        <div style={{ margin: "50px 0", fontSize: "50px", fontWeight: "bold" }}>
-          HINA HOSPITAL
+        <div className={styles.boxForm_form}>
+          <h1>Đăng nhập</h1>
+          {inputs.map((input) => (
+            <FormInput key={input.id} {...input} name={input.name} />
+          ))}
+          <button>Submit</button>
+          <div>
+            <img
+              onClick={() => login(google)}
+              src="/assets/icons/auth/google.svg"
+              className={styles.boxForm_form_iconSocial}
+              alt=""
+            />
+            <img
+              onClick={() => login(google)}
+              src="/assets/icons/auth/facebook.svg"
+              className={styles.boxForm_form_iconSocial}
+              alt=""
+            />
+            <img
+              onClick={() => login(google)}
+              src="/assets/icons/auth/twitter.svg"
+              className={styles.boxForm_form_iconSocial}
+              alt=""
+            />
+          </div>
+          <span>
+            Bạn chưa có tài khoản?{" "}
+            <span>
+              <Link to="/signup">Đăng ký ngay</Link>
+            </span>
+          </span>
         </div>
-        <Form
-          style={{
-            width: "100%",
-            textAlign: "center",
-          }}
-          name="basic"
-          onFinish={onFinish}
-          autoComplete="off"
-        >
-          <Form.Item
-            // label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <input
-              placeholder="Email"
-              style={{
-                border: "none",
-                height: "50px",
-                width: "80%",
-                padding: "10px 15px",
-                borderRadius: "20px",
-                alignContent: "center",
-              }}
-            ></input>
-          </Form.Item>
-
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <input
-              type="password"
-              placeholder="password"
-              style={{
-                border: "none",
-                height: "50px",
-                width: "80%",
-                padding: "10px 15px",
-                borderRadius: "20px",
-              }}
-            ></input>
-          </Form.Item>
-          <Form.Item>
-            <button
-              style={{
-                backgroundColor: "black",
-                color: "#fff",
-                width: "80%",
-                height: "44px",
-                borderRadius: "10px",
-                cursor: "pointer",
-              }}
-              type="primary"
-              htmlType="submit"
-            >
-              Submit
-            </button>
-          </Form.Item>
-          <img
-            onClick={() => login(google)}
-            src="/assets/icons/auth/google.svg"
-            style={{ width: "80px", height: "80px", cursor: "pointer" }}
-            alt=""
-          />
-          <img
-            onClick={() => login(google)}
-            src="/assets/icons/auth/facebook.svg"
-            style={{
-              width: "80px",
-              height: "80px",
-              margin: "20px",
-              cursor: "pointer",
-            }}
-            alt=""
-          />
-          <img
-            onClick={() => login(google)}
-            src="/assets/icons/auth/twitter.svg"
-            style={{ width: "80px", height: "80px", cursor: "pointer" }}
-            alt=""
-          />
-        </Form>
-      </div>
+      </Form>
     </div>
   );
 }
